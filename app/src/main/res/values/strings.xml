@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">TickTacToe</string>
+
+    <!-- String Values  -->
+    <string name="welcome">Tick Tac Toe</string>
+    <string name="play">Play</string>
+    <string name="exit">Exit</string>
+
+
+    <string name="xturn">X \'s Turn - Tap To Play</string>
+    <string name="yturn">Y \'s Turn - Tap To Play</string>
+    <string name="xwon">X Won!!</string>
+    <string name="ywon">Y Won!!</string>
+    <string name="draw">DRAW GAME!!</string>
+</resources>
