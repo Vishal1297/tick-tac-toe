@@ -1,12 +1,13 @@
 package com.vishal.ticktactoe;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
@@ -23,7 +24,7 @@ public class GameActivity extends AppCompatActivity {
     //  2   -   Null
 
     boolean gameStatus = true;
-    int activePlayer = 0;
+    int activePlayer = 0, tapCount = 0;
     int[] gameState = {2, 2, 2, 2, 2, 2, 2, 2, 2};
     int[][] winPos = {
             {0, 1, 2}, {3, 4, 5}, {6, 7, 8},
@@ -40,14 +41,11 @@ public class GameActivity extends AppCompatActivity {
     public void onTap(View view) {
         ImageView img = (ImageView) view;
         int tappedImage = Integer.parseInt(img.getTag().toString());
-
         if (!gameStatus) {
-            resetGame(view);
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            resetGame();
         }
 
-        if (gameState[tappedImage] == 2) {
+        if (gameState[tappedImage] == 2 && gameStatus) {
 
             gameState[tappedImage] = activePlayer;
             img.setTranslationY(-1000f);
@@ -63,7 +61,8 @@ public class GameActivity extends AppCompatActivity {
                 TextView status = findViewById(R.id.status);
                 status.setText(R.string.xturn);
             }
-            img.animate().translationYBy(1000f).setDuration(100);
+            img.animate().translationYBy(1000f).setDuration(200);
+            tapCount++;
         }
 
         //  Player  Winning
@@ -84,31 +83,15 @@ public class GameActivity extends AppCompatActivity {
         }
 
         //  Draw Game
-        int count = 0;
-        for (int i = 0; i < gameState.length; i++) {
-            if (gameState[i] != 2) {
-                count++;
-            } else {
-                count = 0;
-                break;
-            }
-        }
-        if (count == gameState.length) {
+        if (tapCount == 9 && gameStatus) {
             TextView status = findViewById(R.id.status);
             status.setText(R.string.draw);
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(GameActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            }, 1000);
+            resetGame();
         }
     }
 
-    public void resetGame(View view) {
-        gameStatus = true;
+    public void resetGame() {
+        tapCount = 0;
         activePlayer = 0;
         for (int i = 0; i < gameState.length; i++) {
             gameState[i] = 2;
@@ -122,5 +105,34 @@ public class GameActivity extends AppCompatActivity {
         ((ImageView) findViewById(R.id.imageView6)).setImageResource(0);
         ((ImageView) findViewById(R.id.imageView7)).setImageResource(0);
         ((ImageView) findViewById(R.id.imageView8)).setImageResource(0);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);
+        builder.setTitle(R.string.app_name).setMessage(R.string.playAgain).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                gameStatus = true;
+                TextView status = findViewById(R.id.status);
+                status.setText(R.string.xturn);
+            }
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(GameActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        builder.create().show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);
+        builder.setTitle(R.string.exitTitle).setMessage("Are you sure?").setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                GameActivity.super.onBackPressed();
+            }
+        }).setNegativeButton(R.string.cancel, null).setCancelable(false);
+        builder.create().show();
     }
 }

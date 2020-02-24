@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TickTacToe</string>
+    <string name="app_name">Tick Tac Toe</string>
 
     <!-- String Values  -->
     <string name="welcome">Tick Tac Toe</string>
@@ -9,7 +9,12 @@
 
     <string name="xturn">X \'s Turn - Tap To Play</string>
     <string name="yturn">Y \'s Turn - Tap To Play</string>
-    <string name="xwon">X Won!!</string>
-    <string name="ywon">Y Won!!</string>
-    <string name="draw">DRAW GAME!!</string>
+    <string name="xwon">X Won</string>
+    <string name="ywon">Y Won</string>
+    <string name="draw">DRAW GAME</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="playAgain">"Play Again?"</string>
+    <string name="exitTitle">Exit App</string>
 </resources>
